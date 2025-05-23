@@ -86,19 +86,32 @@ class CalculatorViewModel : ViewModel() {
         _state.value = _state.value.copy(isScientificMode = !_state.value.isScientificMode)
     }
 
+    private val evaluator = MathEvaluator()
+
     private fun calculate() {
         try {
-            // Placeholder for actual calculation logic
-            // Will integrate with MathEvaluator later
+            val result = evaluator.evaluate(currentExpression.toString())
+            lastResult = result
             _state.value = _state.value.copy(
                 secondaryDisplay = currentExpression.toString(),
+                primaryDisplay = formatResult(result),
                 isError = false
             )
+            currentExpression.clear()
+            currentExpression.append(result)
         } catch (e: Exception) {
             _state.value = _state.value.copy(
                 primaryDisplay = "Error",
                 isError = true
             )
+        }
+    }
+
+    private fun formatResult(number: Double): String {
+        return if (number.toLong().toDouble() == number) {
+            number.toLong().toString()
+        } else {
+            "%.8f".format(number).trimEnd('0').trimEnd('.')
         }
     }
 

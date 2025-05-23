@@ -142,6 +142,35 @@ fun App() {
                     }
                 }
 
+                if (state.isScientificMode) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        listOf("sin", "cos", "tan").forEach { function ->
+                            Button(
+                                onClick = { viewModel.onAction(CalculatorAction.Scientific(function)) },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(function)
+                            }
+                        }
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        listOf("√", "^", "ln").forEach { function ->
+                            Button(
+                                onClick = { viewModel.onAction(CalculatorAction.Scientific(function)) },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(function)
+                            }
+                        }
+                    }
+                }
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
