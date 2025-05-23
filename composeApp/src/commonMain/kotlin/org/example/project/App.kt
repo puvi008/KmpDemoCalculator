@@ -102,7 +102,46 @@ fun App() {
                     }
                 }
 
-                // More rows for remaining numbers and operators...
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    (4..6).forEach { number ->
+                        Button(
+                            onClick = { viewModel.onAction(CalculatorAction.Number(number)) },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(number.toString())
+                        }
+                    }
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.Operator("-")) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("-")
+                    }
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    (1..3).forEach { number ->
+                        Button(
+                            onClick = { viewModel.onAction(CalculatorAction.Number(number)) },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(number.toString())
+                        }
+                    }
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.Operator("+")) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("+")
+                    }
+                }
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
