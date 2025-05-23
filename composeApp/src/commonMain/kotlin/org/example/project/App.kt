@@ -1,42 +1,130 @@
+
 package org.example.project
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-
-import kotlinproject.composeapp.generated.resources.Res
-import kotlinproject.composeapp.generated.resources.compose_multiplatform
+import androidx.compose.ui.unit.dp
+import org.example.project.calculator.CalculatorAction
+import org.example.project.calculator.CalculatorViewModel
 
 @Composable
-@Preview
 fun App() {
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
+        val viewModel = remember { CalculatorViewModel() }
+        val state by viewModel.state.collectAsState()
+
         Column(
-            modifier = Modifier
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
+            // Display
+            Surface(
+                modifier = Modifier.fillMaxWidth().weight(0.4f),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 1.dp
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Text(
+                        text = state.secondaryDisplay,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = state.primaryDisplay,
+                        style = MaterialTheme.typography.displayLarge
+                    )
+                }
             }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Keypad
+            Column(
+                modifier = Modifier.weight(0.6f),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.AllClear) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("AC")
+                    }
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.Delete) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("⌫")
+                    }
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.ToggleScientific) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Sci")
+                    }
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.Operator("/")) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("÷")
+                    }
+                }
+
+                // Numbers and basic operators
+                (7..9).chunked(3).forEach { row ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        row.forEach { number ->
+                            Button(
+                                onClick = { viewModel.onAction(CalculatorAction.Number(number)) },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(number.toString())
+                            }
+                        }
+                        Button(
+                            onClick = { viewModel.onAction(CalculatorAction.Operator("*")) },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("×")
+                        }
+                    }
+                }
+
+                // More rows for remaining numbers and operators...
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.Number(0)) },
+                        modifier = Modifier.weight(2f)
+                    ) {
+                        Text("0")
+                    }
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.Decimal) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(".")
+                    }
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.Calculate) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("=")
+                    }
                 }
             }
         }
