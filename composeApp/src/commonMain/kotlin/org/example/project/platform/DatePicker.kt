@@ -9,6 +9,3 @@ expect class DatePickerController() {
         onDismiss: () -> Unit = {}
     )
 }
-
-@Composable
-expect fun rememberDatePickerController(): DatePickerController

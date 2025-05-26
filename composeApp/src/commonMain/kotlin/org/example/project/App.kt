@@ -24,9 +24,6 @@ import androidx.compose.ui.unit.dp
 import org.example.project.calculator.CalculatorAction
 import org.example.project.calculator.CalculatorViewModel
 
-import org.example.project.platform.rememberDatePickerController
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Composable
 fun App() {
@@ -104,6 +101,7 @@ fun App() {
                             datePickerController.showDatePicker(
                                 onDateSelected = { timestamp ->
                                     selectedDate = if (timestamp != null) {
+                                        SimpleDate
                                         val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
                                         sdf.format(Date(timestamp))
                                     } else {
