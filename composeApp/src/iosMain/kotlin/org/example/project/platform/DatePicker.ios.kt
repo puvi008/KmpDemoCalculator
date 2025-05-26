@@ -63,3 +63,32 @@ actual class DatePickerController {
 actual fun rememberDatePickerController(): DatePickerController {
     return remember { DatePickerController() }
 }
+
+        val selectAction = UIAlertAction.actionWithTitle(
+            title = "Select",
+            style = UIAlertActionStyleDefault
+        ) { _ ->
+            val selectedDate = datePicker.date
+            val timestamp = (selectedDate.timeIntervalSince1970 * 1000).toLong()
+            onDateSelected(timestamp)
+        }
+
+        val cancelAction = UIAlertAction.actionWithTitle(
+            title = "Cancel",
+            style = UIAlertActionStyleCancel
+        ) { _ ->
+            onDismiss()
+        }
+
+        alertController.addAction(selectAction)
+        alertController.addAction(cancelAction)
+
+        val rootViewController = UIApplication.sharedApplication.keyWindow?.rootViewController
+        rootViewController?.presentViewController(alertController, animated = true, completion = null)
+    }
+}
+
+@Composable
+actual fun rememberDatePickerController(): DatePickerController {
+    return remember { DatePickerController() }
+}

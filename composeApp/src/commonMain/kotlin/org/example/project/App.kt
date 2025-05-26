@@ -9,13 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -250,40 +246,11 @@ fun App() {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(20.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Button(
-                        onClick = { showDate = true },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text("show the dialog")
-                    }
-                }
-
-                if (showDate) {
-                    MyDatePicker(onDismiss = {
-                        showDate = false
-                    })
-                }
+                
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyDatePicker(onDismiss: () -> Unit) {
-    val dateState = rememberDatePickerState()
-    DatePickerDialog(onDismissRequest = { onDismiss() }, confirmButton = {
-        Text(
-            text = "ok",
-        )
-    }) {
-        DatePicker(
-            state = dateState
-        )
-    }
-}
+
 
