@@ -16,13 +16,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+importandroidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.example.project.calculator.CalculatorAction
 import org.example.project.calculator.CalculatorViewModel
+import org.example.project.platform.rememberDatePickerController
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 
 @Composable
@@ -101,9 +105,9 @@ fun App() {
                             datePickerController.showDatePicker(
                                 onDateSelected = { timestamp ->
                                     selectedDate = if (timestamp != null) {
-                                        SimpleDate
-                                        val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-                                        sdf.format(Date(timestamp))
+                                        val instant = Instant.fromEpochMilliseconds(timestamp)
+                                        val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+                                        "${localDateTime.monthNumber.toString().padStart(2, '0')}/${localDateTime.dayOfMonth.toString().padStart(2, '0')}/${localDateTime.year}"
                                     } else {
                                         null
                                     }
@@ -244,11 +248,8 @@ fun App() {
                     }
                 }
 
-                
+
             }
         }
     }
 }
-
-
-
