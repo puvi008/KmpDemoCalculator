@@ -9,12 +9,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.example.project.calculator.CalculatorAction
 import org.example.project.calculator.CalculatorViewModel
+import org.example.project.platform.rememberDatePickerController
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun App() {
     MaterialTheme {
         val viewModel = remember { CalculatorViewModel() }
         val state by viewModel.state.collectAsState()
+        val datePickerController = rememberDatePickerController()
+        var selectedDate by remember { mutableStateOf<String?>(null) }
 
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -70,6 +75,35 @@ fun App() {
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("Sci")
+                    }
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            datePickerController.showDatePicker(
+                                onDateSelected = { timestamp ->
+                                    selectedDate = if (timestamp != null) {
+                                        val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                                        sdf.format(Date(timestamp))
+                                    } else {
+                                        null
+                                    }
+                                }
+                            )
+                        },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Date")
+                    }
+                    Button(
+                        onClick = { /* Add more functionality */ },
+                        modifier = Modifier.weight(3f)
+                    ) {
+                        Text(selectedDate ?: "No date selected")
                     }
                     Button(
                         onClick = { viewModel.onAction(CalculatorAction.Operator("/")) },
